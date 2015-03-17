@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>gov.vha.isaac</groupId>
+        <artifactId>isaac-parent</artifactId>
+        <version>1.3</version>
+    </parent>
+    <groupId>gov.vha.solor</groupId>
+    <artifactId>solor-goods</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>solor-goods: (MMP)</name>
+    <properties>
+        <ochre.version>2.16</ochre.version>
+        <isaac-metadata.version>1.18</isaac-metadata.version>
+        <newtons-cradle.version>1.6</newtons-cradle.version>
+        <snorocket-core.version>2.5.7</snorocket-core.version>
+        <query.version>2.0</query.version>
+        <logic.version>1.2</logic.version>
+    </properties>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                <groupId>gov.vha.isaac</groupId>
+                <artifactId>tcc-mojo</artifactId>
+                <version>${ochre.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <modules>
+        <module>snomed</module>
+        <module>rxnorm</module>
+        <module>loinc</module>
+        <module>fusion</module>
+    </modules>
+</project>
