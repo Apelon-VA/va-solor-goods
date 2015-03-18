@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.vha.solor</groupId>
         <artifactId>solor-goods</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
     <artifactId>snomed</artifactId>
     <name>${project.parent.artifactId}: ${project.artifactId}</name>
@@ -19,6 +19,10 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.ihtsdo</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>gov.vha.isaac</groupId>
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
@@ -38,6 +42,10 @@
                 <exclusion>
                     <groupId>org.ihtsdo.otf</groupId>
                     <artifactId>tcc-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>gov.vha.isaac</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -102,6 +110,16 @@
                         <artifactId>tcc-model-impl</artifactId>
                         <version>${ochre.version}</version>
                     </dependency>
+                    <dependency>
+                        <groupId>gov.vha.isaac</groupId>
+                        <artifactId>isaac-metadata-artifacts</artifactId>
+                        <version>${isaac-metadata.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>gov.vha.isaac</groupId>
+                        <artifactId>isaac-metadata-coordinates</artifactId>
+                        <version>${isaac-metadata.version}</version>
+                    </dependency>
                 </dependencies>
                 <executions>
                     <execution>
@@ -133,10 +151,10 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>load-termstore</id>
+                        <id>load-onto-development</id>
                         <phase>process-resources</phase>
                         <goals>
-                            <goal>load-termstore</goal>
+                            <goal>load-onto-development</goal>
                         </goals>
                         <configuration>
                             <econFileStrings>
@@ -152,7 +170,7 @@
                             <goal>count-concepts</goal>
                         </goals>
                     </execution>
-<!--                    <execution>
+                    <execution>
                         <id>initialize-classifier</id>
                         <phase>process-resources</phase>
                         <goals>
@@ -165,7 +183,7 @@
                         <goals>
                             <goal>full-classification</goal>
                         </goals>
-                    </execution>-->
+                    </execution>
                     <execution>
                         <id>index-termstore</id>
                         <phase>process-resources</phase>

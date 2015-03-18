@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-clean install 8g</actionName>
+            <displayName>clean install 8g</displayName>
+            <goals>
+                <goal>-e</goal>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <MAVEN_OPTS>-Xmx8g</MAVEN_OPTS>
+            </properties>
+        </action>
+    </actions>
