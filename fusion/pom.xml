@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.vha.solor</groupId>
         <artifactId>solor-goods</artifactId>
-        <version>1.3-SNAPSHOT</version>
+        <version>1.4-SNAPSHOT</version>
     </parent>
     <artifactId>fusion</artifactId>
     <name>${project.parent.artifactId}: ${project.artifactId}</name>
