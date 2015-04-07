@@ -12,20 +12,21 @@
     <packaging>pom</packaging>
     <name>solor-goods: (MMP)</name>
     <properties>
-        <ochre.version>2.19</ochre.version>
-        <isaac-metadata.version>1.21</isaac-metadata.version>
-        <newtons-cradle.version>1.9</newtons-cradle.version>
+        <ochre.version>2.21</ochre.version>
+        <isaac.mojo.version>1.0</isaac.mojo.version>
+        <isaac-metadata.version>1.22</isaac-metadata.version>
+        <newtons-cradle.version>1.10</newtons-cradle.version>
         <snorocket-core.version>2.5.7</snorocket-core.version>
-        <query.version>2.5</query.version>
-        <logic.version>1.5</logic.version>
+        <query.version>2.6</query.version>
+        <logic.version>1.6</logic.version>
     </properties>
     <build>
         <pluginManagement>
             <plugins>
                 <plugin>
                 <groupId>gov.vha.isaac</groupId>
-                <artifactId>tcc-mojo</artifactId>
-                <version>${ochre.version}</version>
+                <artifactId>isaac-mojo</artifactId>
+                <version>${isaac.mojo.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
