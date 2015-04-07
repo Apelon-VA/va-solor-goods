@@ -28,6 +28,24 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>gov.va.jif.all-va-sources-wb</groupId>
+            <artifactId>content-processing-rf2</artifactId>
+            <version>3.4-prod-SNAPSHOT</version>
+            <type>zip</type>
+            <classifier>release-files</classifier>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.ihtsdo</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>gov.vha.isaac</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>gov.vha.isaac</groupId>
             <artifactId>isaac-metadata-artifacts</artifactId>
             <classifier>all.econ</classifier>
@@ -79,11 +97,22 @@
                             <outputDirectory>${project.build.directory}/data</outputDirectory>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>extract-va-extension</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>content-processing-rf2</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/data/va-extension</outputDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>gov.vha.isaac</groupId>
-                <artifactId>tcc-mojo</artifactId>
+                <artifactId>isaac-mojo</artifactId>
                 <dependencies>
                     <dependency>
                         <groupId>gov.vha.isaac</groupId>
@@ -136,11 +165,8 @@
                     <execution>
                         <id>start-termstore</id>
                         <phase>process-resources</phase>
-                        <configuration>
-                            <runLevel>2</runLevel>
-                        </configuration>
                         <goals>
-                            <goal>set-run-level</goal>
+                            <goal>startup-isaac</goal>
                         </goals>
                     </execution>
                     <execution>
@@ -194,11 +220,8 @@
                     <execution>
                         <id>stop-termstore</id>
                         <phase>process-resources</phase>
-                        <configuration>
-                            <runLevel>-1</runLevel>
-                        </configuration>
                         <goals>
-                            <goal>set-run-level</goal>
+                            <goal>shutdown-isaac</goal>
                         </goals>
                     </execution>
                 </executions>
