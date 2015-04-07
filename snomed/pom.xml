@@ -27,24 +27,24 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>gov.va.jif.all-va-sources-wb</groupId>
-            <artifactId>content-processing-rf2</artifactId>
-            <version>3.4-prod-SNAPSHOT</version>
-            <type>zip</type>
-            <classifier>release-files</classifier>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ihtsdo</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>gov.vha.isaac</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>gov.va.jif.all-va-sources-wb</groupId>-->
+            <!--<artifactId>content-processing-rf2</artifactId>-->
+            <!--<version>3.4-prod-SNAPSHOT</version>-->
+            <!--<type>zip</type>-->
+            <!--<classifier>release-files</classifier>-->
+            <!--<scope>test</scope>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.ihtsdo</groupId>-->
+                    <!--<artifactId>*</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>gov.vha.isaac</groupId>-->
+                    <!--<artifactId>*</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>gov.vha.isaac</groupId>
             <artifactId>isaac-metadata-artifacts</artifactId>
