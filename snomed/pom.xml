@@ -1,73 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>gov.vha.solor</groupId>
         <artifactId>solor-goods</artifactId>
         <version>1.4-SNAPSHOT</version>
     </parent>
+    
+    <groupId>gov.vha.solor.modules</groupId>
     <artifactId>snomed</artifactId>
     <name>${project.parent.artifactId}: ${project.artifactId}</name>
     <packaging>pom</packaging>
-    <dependencies>        
-        <dependency>
-            <groupId>org.ihtsdo.sct.rf2</groupId>
-            <artifactId>rf-to-econcept-conversion</artifactId>
-            <version>1.3</version>
-            <type>zip</type>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ihtsdo</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>gov.vha.isaac</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>gov.va.jif.all-va-sources-wb</groupId>-->
-            <!--<artifactId>content-processing-rf2</artifactId>-->
-            <!--<version>3.4-prod-SNAPSHOT</version>-->
-            <!--<type>zip</type>-->
-            <!--<classifier>release-files</classifier>-->
-            <!--<scope>test</scope>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.ihtsdo</groupId>-->
-                    <!--<artifactId>*</artifactId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<groupId>gov.vha.isaac</groupId>-->
-                    <!--<artifactId>*</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>gov.vha.isaac</groupId>
-            <artifactId>isaac-metadata-artifacts</artifactId>
-            <classifier>all.econ</classifier>
-            <version>${isaac-metadata.version}</version>
-            <type>zip</type>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ihtsdo.otf</groupId>
-                    <artifactId>tcc-dto-ddo</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.ihtsdo.otf</groupId>
-                    <artifactId>tcc-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>gov.vha.isaac</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
+    
     <build>
         <extensions>
 <!--            <extension>
@@ -81,72 +26,87 @@
                 <version>${query.version}</version>
             </extension>-->
         </extensions>
-        <plugins>            
-            <plugin>
+
+        <plugins>
+           <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>extract-econcept</id>
+                        <id>extract-econcepts</id>
                         <phase>generate-resources</phase>
                         <goals>
-                            <goal>unpack-dependencies</goal>
+                            <goal>unpack</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>rf-to-econcept-conversion,isaac-metadata-artifacts</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}/data</outputDirectory>
+                           <skip>${skipTests}</skip>
+                           <artifactItems>
+                                <artifact>
+                                    <groupId>org.ihtsdo.sct.rf2</groupId>
+                                    <artifactId>rf-to-econcept-conversion</artifactId>
+                                    <version>1.3</version>
+                                    <type>zip</type>
+                                </artifact>
+                                <artifact>
+                                    <groupId>gov.vha.isaac.isaac-metadata.modules</groupId>
+                                    <artifactId>isaac-metadata-artifacts</artifactId>
+                                    <classifier>all</classifier>
+                                    <version>${isaac-metadata.version}</version>
+                                    <type>econ.zip</type>
+                                </artifact>
+                           </artifactItems>
+                           <outputDirectory>${project.build.directory}/data</outputDirectory>
                         </configuration>
                     </execution>
-                    <execution>
+                    
+                    <!--execution>
                         <id>extract-va-extension</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>content-processing-rf2</includeArtifactIds>
+                             <artifactItems>
+                                 <artifact>
+                                    <groupId>gov.va.jif.all-va-sources-wb</groupId>
+                                    <artifactId>content-processing-rf2</artifactId>
+                                    <version>3.4-prod-SNAPSHOT</version>
+                                    <type>zip</type>
+                                    <classifier>release-files</classifier>
+                                 </artifact>
+                             </artifactItems>
                             <outputDirectory>${project.build.directory}/data/va-extension</outputDirectory>
                         </configuration>
-                    </execution>
+                    </execution-->
                 </executions>
             </plugin>
             <plugin>
-                <groupId>gov.vha.isaac</groupId>
+                <groupId>gov.vha.isaac.isaac-mojo</groupId>
                 <artifactId>isaac-mojo</artifactId>
                 <dependencies>
                     <dependency>
-                        <groupId>gov.vha.isaac</groupId>
+                        <groupId>gov.vha.isaac.newtons-cradle.modules</groupId>
                         <artifactId>newtons-cradle-extension</artifactId>
                         <version>${newtons-cradle.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>gov.vha.isaac</groupId>
+                        <groupId>gov.vha.isaac.query-service.modules</groupId>
                         <artifactId>query-lucene</artifactId>
                         <version>${query.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>gov.vha.isaac</groupId>
+                        <groupId>gov.vha.isaac.query-service.modules</groupId>
                         <artifactId>query-implementation</artifactId>
                         <version>${query.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>gov.vha.isaac</groupId>
+                        <groupId>gov.vha.isaac.logic.modules</groupId>
                         <artifactId>logic</artifactId>
                         <version>${logic.version}</version>
-                    </dependency>                    
-                    <dependency>
-                        <groupId>gov.vha.isaac</groupId>
-                        <artifactId>tcc-model-impl</artifactId>
-                        <version>${ochre.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>gov.vha.isaac</groupId>
+                        <groupId>gov.vha.isaac.isaac-metadata.modules</groupId>
                         <artifactId>isaac-metadata-artifacts</artifactId>
-                        <version>${isaac-metadata.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>gov.vha.isaac</groupId>
-                        <artifactId>isaac-metadata-coordinates</artifactId>
                         <version>${isaac-metadata.version}</version>
                     </dependency>
                 </dependencies>
@@ -225,15 +185,14 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>        
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
                 <configuration>
                     <descriptors>
-                        <descriptor>src/main/assembly/lucene.xml</descriptor>
                         <descriptor>src/main/assembly/cradle.xml</descriptor>
+                        <descriptor>src/main/assembly/lucene.xml</descriptor>
                     </descriptors>
                     <!-- the default puts these in with the info in the classifier, but we want it as part of the type -->
                     <attach>false</attach>
@@ -247,13 +206,12 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>   
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.9.1</version>
                 <executions>
-                   <execution>
+                    <execution>
                         <id>attach-artifacts</id>
                         <goals>
                             <goal>attach-artifact</goal>
@@ -274,7 +232,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>  
+            </plugin>
         </plugins>
     </build>
 </project>

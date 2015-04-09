@@ -4,27 +4,30 @@
     <parent>
         <groupId>gov.vha.isaac</groupId>
         <artifactId>isaac-parent</artifactId>
-        <version>1.3</version>
+        <version>1.4-SNAPSHOT</version>
     </parent>
+
     <groupId>gov.vha.solor</groupId>
     <artifactId>solor-goods</artifactId>
     <version>1.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>solor-goods: (MMP)</name>
+    
     <properties>
-        <ochre.version>2.21</ochre.version>
-        <isaac.mojo.version>1.0</isaac.mojo.version>
-        <isaac-metadata.version>1.22</isaac-metadata.version>
-        <newtons-cradle.version>1.10</newtons-cradle.version>
+        <ochre.version>2.23-SNAPSHOT</ochre.version>
+        <isaac.mojo.version>1.2-SNAPSHOT</isaac.mojo.version>
+        <isaac-metadata.version>1.25-SNAPSHOT</isaac-metadata.version>
+        <newtons-cradle.version>1.13-SNAPSHOT</newtons-cradle.version>
+        <query.version>2.8-SNAPSHOT</query.version>
+        <logic.version>1.8-SNAPSHOT</logic.version>
         <snorocket-core.version>2.5.7</snorocket-core.version>
-        <query.version>2.6</query.version>
-        <logic.version>1.6</logic.version>
     </properties>
+    
     <build>
         <pluginManagement>
             <plugins>
                 <plugin>
-                <groupId>gov.vha.isaac</groupId>
+                <groupId>gov.vha.isaac.isaac-mojo</groupId>
                 <artifactId>isaac-mojo</artifactId>
                 <version>${isaac.mojo.version}</version>
                 </plugin>
