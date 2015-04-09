@@ -9,7 +9,7 @@
   <fileSets>
     <fileSet>
       <directory>${project.build.directory}/search/lucene</directory>
-      <outputDirectory>/search/lucene</outputDirectory>
+      <outputDirectory>search/lucene</outputDirectory>
     </fileSet>
   </fileSets>
 </assembly>
