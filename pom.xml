@@ -27,7 +27,7 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                <groupId>gov.vha.isaac.isaac-mojo</groupId>
+                <groupId>gov.vha.isaac</groupId>
                 <artifactId>isaac-mojo</artifactId>
                 <version>${isaac.mojo.version}</version>
                 </plugin>
