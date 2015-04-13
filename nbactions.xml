@@ -28,4 +28,15 @@
                 <Env.MAVEN_OPTS>-Xmx8g -Xms8g</Env.MAVEN_OPTS>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-jgitflow:release-finish</actionName>
+            <displayName>jgitflow:release-finish</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>jgitflow:release-finish</goal>
+            </goals>
+            <properties>
+                <Env.MAVEN_OPTS>-Xmx8g -Xms8g</Env.MAVEN_OPTS>
+            </properties>
+        </action>
     </actions>
