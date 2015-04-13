@@ -17,4 +17,15 @@
                 
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-jgitflow:release-start</actionName>
+            <displayName>jgitflow:release-start</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>jgitflow:release-start</goal>
+            </goals>
+            <properties>
+                <Env.MAVEN_OPTS>-Xmx8g -Xms8g</Env.MAVEN_OPTS>
+            </properties>
+        </action>
     </actions>
