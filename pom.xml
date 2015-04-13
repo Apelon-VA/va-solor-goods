@@ -8,7 +8,7 @@
     </parent>
     <groupId>gov.vha.solor</groupId>
     <artifactId>solor-goods</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>solor-goods: (MMP)</name>
     <properties>
