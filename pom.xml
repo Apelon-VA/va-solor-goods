@@ -12,13 +12,13 @@
     <packaging>pom</packaging>
     <name>solor-goods: (MMP)</name>
     <properties>
-        <ochre.version>2.23</ochre.version>
-        <isaac.mojo.version>1.2</isaac.mojo.version>
-        <isaac-metadata.version>1.25</isaac-metadata.version>
-        <newtons-cradle.version>1.13</newtons-cradle.version>
+        <ochre.version>2.24</ochre.version>
+        <isaac.mojo.version>1.3</isaac.mojo.version>
+        <isaac-metadata.version>1.26</isaac-metadata.version>
+        <newtons-cradle.version>1.14</newtons-cradle.version>
         <snorocket-core.version>2.5.7</snorocket-core.version>
-        <query.version>2.8</query.version>
-        <logic.version>1.8</logic.version>
+        <query.version>2.9</query.version>
+        <logic.version>1.9</logic.version>
     </properties>
     <build>
         <pluginManagement>
