@@ -124,16 +124,6 @@
                 <artifactId>isaac-mojo</artifactId>
                 <dependencies>
                     <dependency>
-                        <groupId>gov.vha.isaac.newtons-cradle.modules</groupId>
-                        <artifactId>newtons-cradle</artifactId>
-                        <version>${newtons-cradle.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>gov.vha.isaac.query-service.modules</groupId>
-                        <artifactId>query-lucene</artifactId>
-                        <version>${query.version}</version>
-                    </dependency>
-                    <dependency>
                         <groupId>gov.vha.isaac.query-service.modules</groupId>
                         <artifactId>query-implementation</artifactId>
                         <version>${query.version}</version>
@@ -142,11 +132,6 @@
                         <groupId>gov.vha.isaac.logic.modules</groupId>
                         <artifactId>logic</artifactId>
                         <version>${logic.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>gov.vha.isaac.isaac-metadata.modules</groupId>
-                        <artifactId>isaac-metadata-artifacts</artifactId>
-                        <version>${isaac-metadata.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>
