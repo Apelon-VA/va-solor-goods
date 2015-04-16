@@ -9,7 +9,7 @@
   <fileSets>
     <fileSet>
       <directory>${project.build.directory}/object-chronicles/cradle</directory>
-      <outputDirectory>/object-chronicles/cradle</outputDirectory>
+      <outputDirectory>object-chronicles/cradle</outputDirectory>
     </fileSet>
   </fileSets>
 </assembly>
