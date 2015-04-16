@@ -24,9 +24,9 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                <groupId>gov.vha.isaac</groupId>
-                <artifactId>isaac-mojo</artifactId>
-                <version>${isaac.mojo.version}</version>
+                    <groupId>gov.vha.isaac</groupId>
+                    <artifactId>isaac-mojo</artifactId>
+                    <version>${isaac.mojo.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
