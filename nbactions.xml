@@ -39,4 +39,26 @@
                 <Env.MAVEN_OPTS>-Xmx8g -Xms8g</Env.MAVEN_OPTS>
             </properties>
         </action>
+        <action>
+            <actionName>rebuild</actionName>
+            <packagings>
+                <packaging>*</packaging>
+            </packagings>
+            <goals>
+                <goal>-e</goal>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>build-with-dependencies</actionName>
+            <reactor>also-make</reactor>
+            <packagings>
+                <packaging>*</packaging>
+            </packagings>
+            <goals>
+                <goal>-e</goal>
+                <goal>install</goal>
+            </goals>
+        </action>
     </actions>
