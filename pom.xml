@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.vha.isaac</groupId>
         <artifactId>isaac-parent</artifactId>
-        <version>1.5</version>
+        <version>1.6-SNAPSHOT</version>
     </parent>
 
     <groupId>gov.vha.solor</groupId>
@@ -14,10 +14,10 @@
     <name>solor-goods: (MMP)</name>
     
     <properties>
-        <isaac.mojo.version>1.5</isaac.mojo.version>
-        <isaac-metadata.version>1.28</isaac-metadata.version>
-        <query.version>2.11</query.version>
-        <logic.version>1.11</logic.version>
+        <isaac.mojo.version>1.6-SNAPSHOT</isaac.mojo.version>
+        <isaac-metadata.version>1.29-SNAPSHOT</isaac-metadata.version>
+        <query.version>2.12-SNAPSHOT</query.version>
+        <logic.version>1.12-SNAPSHOT</logic.version>
     </properties>
     
     <build>
