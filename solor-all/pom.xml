@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.vha.solor</groupId>
+		<artifactId>solor-goods</artifactId>
+		<version>1.8-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>gov.vha.solor.modules</groupId>
+	<artifactId>solor-all</artifactId>
+	<name>SOLOR Nebula Database Assembly</name>
+	<packaging>pom</packaging>
+
+	<description>A SOLOR database, including sct-econcept-2015.01.31-build-5-active-only, loinc-econcept-2.48-loader-3.2 and RxNormH-econcept-2014.09.02-loader-3.2</description>
+
+	<properties>
+		<!-- For no classifier, leave this blank or remove the property entirely-->
+		<resultArtifactClassifier>active-only</resultArtifactClassifier>
+		
+		<isaac-gui.version>Sprint_21-SNAPSHOT</isaac-gui.version>
+		
+		<!-- Don't edit these -->
+		<inParent>false</inParent>
+	</properties>
+	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>Copyright Notice
+				This is a work of the U.S. Government and is not subject to copyright
+				protection in the United States. Foreign copyrights may apply.
+			</comments>
+		</license>
+		<license>
+			<name>SNOMED CT affiliate license agreement</name>
+			<url>https://uts.nlm.nih.gov/help/license/LicenseAgreement.pdf</url>
+			<comments>The SNOMED CT content packaged by this module is governed by the SNOMED CT affiliate license agreement</comments>
+		</license>
+		<license>
+			<name>LOINC License</name>
+			<url>https://loinc.org/terms-of-use</url>
+			<comments>The LOINC content packaged by this module is governed by the LOINC license</comments>
+		</license>
+		<license>
+			<name>RxNorm / UMLS license</name>
+			<url>https://uts.nlm.nih.gov/license.html</url>
+			<comments>The RxNorm content packaged by this module is governed licensed by the National Library of Medicine, Department of Health and Human Services</comments>
+		</license>
+	</licenses>
+
+	<dependencies>
+		<!-- Metadata -->
+		<dependency>
+			<groupId>gov.vha.isaac.isaac-metadata.modules</groupId>
+			<artifactId>isaac-metadata-artifacts</artifactId>
+			<classifier>all</classifier>
+			<version>${isaac-metadata.version}</version>
+			<type>econ.zip</type>
+			<optional>true</optional> <!-- Not needed at runtime / transitively -->
+		</dependency>
+
+		<!-- Snomed -->
+		<dependency>
+			<groupId>org.ihtsdo.sct.rf2</groupId>
+			<artifactId>rf-to-econcept-conversion</artifactId>
+			<version>1.3</version>
+			<type>zip</type>
+			<scope>test</scope>
+			<optional>true</optional> <!-- Not needed at runtime / transitively -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.ihtsdo</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>gov.vha.isaac</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<!-- RxNorm -->
+		<dependency>
+			<groupId>gov.va.oia.terminology.converters</groupId>
+			<artifactId>RxNormH-econcept</artifactId>
+			<version>2014.09.02-loader-3.2</version>
+			<type>jbin.zip</type>
+			<scope>compile</scope>
+			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
+		</dependency>
+		
+		<!-- LOINC -->
+		<dependency>
+			<groupId>gov.va.oia.terminology.converters</groupId>
+			<artifactId>loinc-econcept</artifactId>
+			<version>2.48-loader-3.2</version>
+			<type>jbin.zip</type>
+			<scope>compile</scope>
+			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
+		</dependency>
+	</dependencies>
+
+	
+	<build>
+		<plugins>
+			<!-- Unpack data projects, load econcepts files,repack database -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>extract-econcept-SCT-and-metadata</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeArtifactIds>rf-to-econcept-conversion,isaac-metadata-artifacts</includeArtifactIds>
+							<outputDirectory>${project.build.directory}/data</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>extract-loinc-econcept</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeArtifactIds>loinc-econcept</includeArtifactIds>
+							<outputDirectory>${project.build.directory}/data/loinc</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>extract-rxnorm-econcept</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeArtifactIds>RxNormH-econcept</includeArtifactIds>
+							<outputDirectory>${project.build.directory}/data/rxnorm</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		
+			<plugin>
+				<groupId>gov.vha.isaac</groupId>
+				<artifactId>isaac-mojo</artifactId>
+				<dependencies>
+					<!-- This will go away when our constants get migrated into the metadata project -->
+					<dependency>
+						<groupId>gov.vha.isaac.gui.modules</groupId>
+						<artifactId>constants</artifactId>
+						<version>${isaac-gui.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>set-termstore-properties</id>
+						<goals>
+							<goal>set-termstore-properties</goal>
+						</goals>
+						<configuration>
+							<datastoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/</datastoreRootLocation>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>generate Concept Spec Metadata</id>
+						<goals>
+							<goal>generate-metadata-eConcepts</goal>
+						</goals>
+						<configuration>
+							<outputFile>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</outputFile>
+							<!-- These will go away when these constants get migrated -->
+							<classesWithConceptSpecs>
+								<classesWithconceptSpec>org.ihtsdo.otf.tcc.api.metadata.binding.RefexDynamic</classesWithconceptSpec>
+								<classesWithconceptSpec>gov.va.isaac.constants.Search</classesWithconceptSpec>
+								<classesWithconceptSpec>gov.va.isaac.constants.MappingConstants</classesWithconceptSpec>
+								<classesWithconceptSpec>gov.va.isaac.constants.ISAAC</classesWithconceptSpec>
+								<classesWithconceptSpec>gov.va.isaac.constants.InformationModels</classesWithconceptSpec>
+							</classesWithConceptSpecs>
+							<terminologyRoots>
+								<MojoConceptSpec>
+									<fsn>LOINC</fsn>
+									<uuid>3958d043-9e8c-508e-bf6d-fd9c83a856da</uuid>
+								</MojoConceptSpec>
+							</terminologyRoots>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>start-termstore</id>
+						<goals>
+							<goal>startup-isaac</goal>
+							<goal>start-heap-ticker</goal>
+							<goal>start-tasks-ticker</goal>
+							<goal>count-concepts</goal>
+						</goals>
+					</execution>
+					
+					<execution>
+						<id>load-onto-development</id>
+						<goals>
+							<goal>load-onto-development</goal>
+						</goals>
+						<configuration>
+							<econFileStrings>
+								<econFileString>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</econFileString>
+								<econFileString>${project.build.directory}/data/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
+								<econFileString>${project.build.directory}/data/sctSiEConcepts.jbin</econFileString>
+								<!-- Broken at the moment -->
+								<!--econFileString>${project.build.directory}/data/rxnorm/RRF-RXN.jbin</econFileString-->
+								<!-- econFileString>${project.build.directory}/data/loinc/loincEConcepts.jbin</econFileString-->
+							</econFileStrings>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>count-after-load</id>
+						<goals>
+							<goal>count-concepts</goal>
+						</goals>
+					</execution>
+					
+					<execution>
+						<id>classify-and-index</id>
+						<goals>
+							<goal>initialize-classifier</goal>
+							<goal>full-classification</goal>
+							<goal>index-termstore</goal>
+							<goal>stop-heap-ticker</goal>
+							<goal>stop-tasks-ticker</goal>
+							<goal>shutdown-isaac</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

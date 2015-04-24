@@ -11,15 +11,54 @@
     <artifactId>snomed</artifactId>
     <name>${project.parent.artifactId}: ${project.artifactId}</name>
     <packaging>pom</packaging>
+    
+    <description>An ISAAC database, including Snomed</description>
+    
+    <properties>
+        <!-- For no classifier, leave this blank or remove the property entirely-->
+        <resultArtifactClassifier>all</resultArtifactClassifier>
+
+        <!-- Don't edit these -->
+        <inParent>false</inParent>
+    </properties>
+    
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>Copyright Notice
+                This is a work of the U.S. Government and is not subject to copyright
+                protection in the United States. Foreign copyrights may apply.
+            </comments>
+        </license>
+        <license>
+            <name>SNOMED CT affiliate license agreement</name>
+            <url>https://uts.nlm.nih.gov/help/license/LicenseAgreement.pdf</url>
+            <comments>The SNOMED CT content packaged by this module is governed by the SNOMED CT affiliate license agreement</comments>
+        </license>
+    </licenses>
+    
 
     <dependencies>
+        <!-- Metadata -->
+        <dependency>
+            <groupId>gov.vha.isaac.isaac-metadata.modules</groupId>
+            <artifactId>isaac-metadata-artifacts</artifactId>
+            <classifier>all</classifier>
+            <version>${isaac-metadata.version}</version>
+            <type>econ.zip</type>
+            <optional>true</optional> <!-- Not needed at runtime / transitively -->
+        </dependency>
+    
+        <!-- Snomed -->
         <dependency>
             <groupId>org.ihtsdo.sct.rf2</groupId>
             <artifactId>rf-to-econcept-conversion</artifactId>
             <version>1.3</version>
             <type>zip</type>
             <scope>test</scope>
-            <optional>true</optional>
+            <optional>true</optional> <!-- Not needed at runtime / transitively -->
             <exclusions>
                 <exclusion>
                     <groupId>org.ihtsdo</groupId>
@@ -50,29 +89,7 @@
                 </exclusion>
             </exclusions>
         </dependency-->
-        <dependency>
-            <groupId>gov.vha.isaac.isaac-metadata.modules</groupId>
-            <artifactId>isaac-metadata-artifacts</artifactId>
-            <classifier>all</classifier>
-            <version>${isaac-metadata.version}</version>
-            <type>econ.zip</type>
-            <scope>test</scope>
-            <optional>true</optional>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ihtsdo.otf</groupId>
-                    <artifactId>tcc-dto-ddo</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.ihtsdo.otf</groupId>
-                    <artifactId>tcc-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>gov.vha.isaac</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
     </dependencies>
 
     <build>
@@ -90,6 +107,7 @@
         </extensions>
 
         <plugins>
+            <!-- Unpack data projects, load econcepts files,repack database -->
            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -118,21 +136,10 @@
                     </execution-->
                 </executions>
             </plugin>
+            
             <plugin>
                 <groupId>gov.vha.isaac</groupId>
                 <artifactId>isaac-mojo</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>gov.vha.isaac.query-service.modules</groupId>
-                        <artifactId>query-implementation</artifactId>
-                        <version>${query.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>gov.vha.isaac.logic.modules</groupId>
-                        <artifactId>logic</artifactId>
-                        <version>${logic.version}</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
                         <id>set-termstore-properties</id>
@@ -140,8 +147,7 @@
                             <goal>set-termstore-properties</goal>
                         </goals>
                         <configuration>
-                            <termstoreRootLocation>${project.build.directory}/object-chronicles</termstoreRootLocation>
-                            <searchRootLocation>${project.build.directory}/search</searchRootLocation>
+                            <datastoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/</datastoreRootLocation>
                         </configuration>
                     </execution>
                     <execution>
@@ -181,53 +187,6 @@
                             <goal>stop-tasks-ticker</goal>
                             <goal>shutdown-isaac</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/cradle.xml</descriptor>
-                        <descriptor>src/main/assembly/lucene.xml</descriptor>
-                    </descriptors>
-                    <!-- the default puts these in with the info in the classifier, but we want it as part of the type -->
-                    <attach>false</attach>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-artifacts</id>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <type>lucene.zip</type>
-                                    <classifier>all</classifier>
-                                    <file>${project.build.directory}/${project.build.finalName}-all-lucene.zip</file>
-                                </artifact>
-                                <artifact>
-                                    <type>cradle.zip</type>
-                                    <classifier>all</classifier>
-                                    <file>${project.build.directory}/${project.build.finalName}-all-cradle.zip</file>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
