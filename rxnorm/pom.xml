@@ -4,11 +4,19 @@
     <parent>
         <groupId>gov.vha.solor</groupId>
         <artifactId>solor-goods</artifactId>
-        <version>1.7</version>
+        <version>1.8</version>
     </parent>
     
     <groupId>gov.vha.solor.modules</groupId>
     <artifactId>rxnorm</artifactId>
     <name>${project.parent.artifactId}: ${project.artifactId}</name>
     <packaging>pom</packaging>
+    
+    <properties>
+        <!-- For no classifier, leave this blank or remove the property entirely-->
+        <resultArtifactClassifier />
+        
+        <!-- Don't edit these -->
+        <!-- inParent>false</inParent-->  <!-- Set to true when this pom is configured to build something -->
+    </properties>
 </project>

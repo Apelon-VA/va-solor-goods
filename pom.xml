@@ -4,21 +4,32 @@
     <parent>
         <groupId>gov.vha.isaac</groupId>
         <artifactId>isaac-parent</artifactId>
-        <version>1.5</version>
+        <version>1.6</version>
     </parent>
 
     <groupId>gov.vha.solor</groupId>
     <artifactId>solor-goods</artifactId>
-    <version>1.7</version>
+    <version>1.8</version>
     <packaging>pom</packaging>
     <name>solor-goods: (MMP)</name>
     
     <properties>
-        <isaac.mojo.version>1.5</isaac.mojo.version>
-        <isaac-metadata.version>1.28</isaac-metadata.version>
-        <query.version>2.11</query.version>
-        <logic.version>1.11</logic.version>
+        <isaac.mojo.version>1.6</isaac.mojo.version>
+        <isaac-metadata.version>1.29</isaac-metadata.version>
+        <query.version>2.12</query.version>
+        <logic.version>1.12</logic.version>
+        
+        <!-- this should be overridden by a sub-mojo, if necessary - don't change it here -->
+        <resultArtifactClassifier />
+        <inParent>true</inParent>
+        <chronicles.type>cradle.zip</chronicles.type>
+        <index.type>lucene.zip</index.type>
+        <project.organization.name>${project.organization.name}</project.organization.name> <!-- Maven is broken and doesn't replace this properly if not redeclared -->
     </properties>
+
+    <scm>
+        <url>https://github.com/Apelon-VA/va-solor-goods.git</url>
+    </scm>
     
     <build>
         <pluginManagement>
@@ -29,15 +40,146 @@
                     <version>${isaac.mojo.version}</version>
                     <dependencies>
                         <dependency>
-                            <groupId>org.slf4j</groupId>
-                            <artifactId>slf4j-simple</artifactId>
-                            <version>${slf4j.version}</version>
+                            <groupId>gov.vha.isaac.query-service.modules</groupId>
+                            <artifactId>query-implementation</artifactId>
+                            <version>${query.version}</version>
+                            <optional>true</optional>
+                        </dependency>
+                        <dependency>
+                            <groupId>gov.vha.isaac.logic.modules</groupId>
+                            <artifactId>logic</artifactId>
+                            <version>${logic.version}</version>
                             <optional>true</optional>
                         </dependency>
                     </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <!-- Note that all of these plugins are configured to not run during the building of this parent pom - they only execute during child pom building -->
+            <plugin>
+                <!-- metadata we want in the output package -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy metadata files</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <skip>${inParent}</skip>
+                            <target>
+                                <!-- Copy the things necessary to reproduce the build -->
+                                <copy filtering="false" toDir="${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/META-INF/maven/${project.groupId}/${project.artifactId}/">
+                                    <fileset dir="${basedir}">
+                                        <include name="*.txt" />
+                                        <include name="*.xml" />
+                                    </fileset>
+                                    <fileset dir="${basedir}">
+                                        <include name="src/**/*" />
+                                    </fileset>
+                                </copy>
+                                
+                                <!-- Create a file with the active build properties -->
+                                <echoproperties destfile="${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/META-INF/maven/${project.groupId}/${project.artifactId}/pom.properties" />
+                                
+                                <!-- Setup the manifest, copy the license files -->
+                                <copy filtering="false" toDir="${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/META-INF/">
+                                    <fileset dir="${basedir}">
+                                        <include name="LICENSE.txt" />
+                                        <include name="NOTICE.txt" />
+                                    </fileset>
+                                </copy>
+                                
+                                <!-- Write a manifest file, with properties filled in -->
+                                <copy filtering="true" toDir="${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/META-INF/">
+                                    <fileset dir="${basedir}/src/assembly/">
+                                        <include name="MANIFEST.MF" />
+                                    </fileset>
+                                    <filterset begintoken="${" endtoken="}" filtersfile="${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/META-INF/maven/${project.groupId}/${project.artifactId}/pom.properties" />
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>zip</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <skipAssembly>${inParent}</skipAssembly>
+                            <descriptors>
+                                <descriptor>${basedir}/src/assembly/cradle.xml</descriptor>
+                                <descriptor>${basedir}/src/assembly/lucene.xml</descriptor>
+                            </descriptors>
+                            <attach>false</attach>
+                            <encoding>UTF-8</encoding>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <!-- create a property for the classifier (if the classifier property is set) that has a leading hyphen -->
+                    <execution>
+                        <id>regex-property</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>regex-property</goal>
+                        </goals>
+                        <configuration>
+                            <skipAttach>${inParent}</skipAttach>
+                            <!-- If we match just a hyphen (no classifier) then replace (blank) otherwise, we get the 'value' which has a prefixed hyphen -->
+                            <name>resultArtifactClassifierWithLeadingHyphen</name>
+                            <value>-${resultArtifactClassifier}</value>
+                            <regex>^-$</regex>
+                            <replacement>${resultArtifactClassifier}</replacement>
+                            <failIfNoMatch>false</failIfNoMatch>
+                        </configuration>
+                    </execution>
+                
+                    <execution>
+                        <id>attach-artifact</id>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <skipAttach>${inParent}</skipAttach>
+                            <artifacts>
+                                <artifact>
+                                    <type>${chronicles.type}</type>
+                                    <!-- Note that the assembly plugin doesn't use the same classifier - we hack the classifier it returns to be a mis
+                                    mash of classifier and part of type.  So there is always a classifier on the produced zip file, even if no classifier
+                                    was specified by the user.  During artifact attachment, this classifier/type mess is corrected. -->
+                                    <file>${project.build.directory}/${project.build.finalName}-${resultArtifactClassifier}.cradle.zip</file>
+                                    <classifier>${resultArtifactClassifier}</classifier>
+                                </artifact>
+                                <artifact>
+                                    <type>${index.type}</type>
+                                    <!-- Note that the assembly plugin doesn't use the same classifier - we hack the classifier it returns to be a mis
+                                    mash of classifier and part of type.  So there is always a classifier on the produced zip file, even if no classifier
+                                    was specified by the user.  During artifact attachment, this classifier/type mess is corrected. -->
+                                    <file>${project.build.directory}/${project.build.finalName}-${resultArtifactClassifier}.lucene.zip</file>
+                                    <classifier>${resultArtifactClassifier}</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <modules>
@@ -45,5 +187,6 @@
         <module>rxnorm</module>
         <module>loinc</module>
         <module>fusion</module>
+        <module>solor-all</module>
     </modules>
 </project>

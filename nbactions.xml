@@ -9,7 +9,7 @@
                 <goal>install</goal>
             </goals>
             <properties>
-                <Env.MAVEN_OPTS>-Xmx8g -Xms8g</Env.MAVEN_OPTS>
+                <Env.MAVEN_OPTS>-Xmx12g -Xms12g</Env.MAVEN_OPTS>
                 
                 
                 
