@@ -9,7 +9,7 @@
 	
 	<groupId>gov.vha.solor.modules</groupId>
 	<artifactId>solor-all</artifactId>
-	<name>SOLOR Nebula Database Assembly</name>
+	<name>${project.parent.artifactId}: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<description>A SOLOR database, including sct-econcept-2015.01.31-build-5-active-only, loinc-econcept-2.48-loader-3.2 and RxNormH-econcept-2014.09.02-loader-3.2</description>
@@ -18,7 +18,7 @@
 		<!-- For no classifier, leave this blank or remove the property entirely-->
 		<resultArtifactClassifier>active-only</resultArtifactClassifier>
 		
-		<isaac-gui.version>Sprint_21-SNAPSHOT</isaac-gui.version>
+		<isaac-gui.version>23.1-SNAPSHOT</isaac-gui.version>
 		
 		<!-- Don't edit these -->
 		<inParent>false</inParent>
