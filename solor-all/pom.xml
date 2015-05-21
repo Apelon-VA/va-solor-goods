@@ -84,9 +84,9 @@
 		
 		<!-- RxNorm -->
 		<dependency>
-			<groupId>gov.va.oia.terminology.converters</groupId>
-			<artifactId>RxNormH-econcept</artifactId>
-			<version>2014.09.02-loader-3.2</version>
+			<groupId>gov.vha.isaac.terminology.converters</groupId>
+			<artifactId>term-convert-rxnorm-econcept</artifactId>
+			<version>2014.09.02-loader-4.0</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
@@ -94,9 +94,9 @@
 		
 		<!-- LOINC -->
 		<dependency>
-			<groupId>gov.va.oia.terminology.converters</groupId>
-			<artifactId>loinc-econcept</artifactId>
-			<version>2.48-loader-3.2</version>
+			<groupId>gov.vha.isaac.terminology.converters</groupId>
+			<artifactId>term-convert-loinc-econcept</artifactId>
+			<version>2.48-loader-4.0</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
@@ -129,7 +129,7 @@
 							<goal>unpack-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeArtifactIds>loinc-econcept</includeArtifactIds>
+							<includeArtifactIds>term-convert-loinc-econcept</includeArtifactIds>
 							<outputDirectory>${project.build.directory}/data/loinc</outputDirectory>
 						</configuration>
 					</execution>
@@ -140,7 +140,7 @@
 							<goal>unpack-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeArtifactIds>RxNormH-econcept</includeArtifactIds>
+							<includeArtifactIds>term-convert-rxnorm-econcept</includeArtifactIds>
 							<outputDirectory>${project.build.directory}/data/rxnorm</outputDirectory>
 						</configuration>
 					</execution>
@@ -184,12 +184,6 @@
 								<classesWithconceptSpec>gov.va.isaac.constants.ISAAC</classesWithconceptSpec>
 								<classesWithconceptSpec>gov.va.isaac.constants.InformationModels</classesWithconceptSpec>
 							</classesWithConceptSpecs>
-							<terminologyRoots>
-								<MojoConceptSpec>
-									<fsn>LOINC</fsn>
-									<uuid>3958d043-9e8c-508e-bf6d-fd9c83a856da</uuid>
-								</MojoConceptSpec>
-							</terminologyRoots>
 						</configuration>
 					</execution>
 					
@@ -213,9 +207,8 @@
 								<econFileString>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</econFileString>
 								<econFileString>${project.build.directory}/data/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
 								<econFileString>${project.build.directory}/data/sctSiEConcepts.jbin</econFileString>
-								<!-- Broken at the moment -->
-								<!--econFileString>${project.build.directory}/data/rxnorm/RRF-RXN.jbin</econFileString-->
-								<!-- econFileString>${project.build.directory}/data/loinc/loincEConcepts.jbin</econFileString-->
+								<econFileString>${project.build.directory}/data/rxnorm/RRF-RXN.jbin</econFileString>
+								<econFileString>${project.build.directory}/data/loinc/loincEConcepts.jbin</econFileString>
 							</econFileStrings>
 						</configuration>
 					</execution>
