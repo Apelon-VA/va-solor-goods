@@ -149,7 +149,7 @@
                             <failIfNoMatch>false</failIfNoMatch>
                         </configuration>
                     </execution>
-                
+
                     <execution>
                         <id>attach-artifact</id>
                         <goals>
