@@ -17,9 +17,7 @@
 	<properties>
 		<!-- For no classifier, leave this blank or remove the property entirely-->
 		<resultArtifactClassifier>active-only</resultArtifactClassifier>
-		
-		<isaac-gui.version>23.1-SNAPSHOT</isaac-gui.version>
-		
+
 		<!-- Don't edit these -->
 		<inParent>false</inParent>
 	</properties>
@@ -150,6 +148,7 @@
 			<plugin>
 				<groupId>gov.vha.isaac</groupId>
 				<artifactId>isaac-mojo</artifactId>
+				
 				<dependencies>
 					<!-- This will go away when our constants get migrated into the metadata project -->
 					<dependency>
@@ -157,6 +156,13 @@
 						<artifactId>constants</artifactId>
 						<version>${isaac-gui.version}</version>
 					</dependency>
+					
+					<dependency>
+						<groupId>gov.vha.isaac.gui.modules</groupId>
+						<artifactId>db-processing-rules</artifactId>
+						<version>${isaac-gui.version}</version>
+					</dependency>
+					
 				</dependencies>
 				<executions>
 					<execution>
@@ -221,11 +227,42 @@
 					</execution>
 					
 					<execution>
-						<id>classify-and-index</id>
+						<id>index</id>
+						<goals>
+							<goal>index-termstore</goal>
+						</goals>
+					</execution>
+					
+					<!-- Apply the Solor overlay rules -->
+					<execution>
+						<id>execute rules</id>
+						<goals>
+							<goal>execute-transforms</goal>
+						</goals>
+						<configuration>
+							<summaryOutputFolder>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/META-INF/maven/${project.groupId}/${project.artifactId}</summaryOutputFolder>
+							<transforms>
+								<Transform>
+									<name>Generate Missing Preferred Terms</name>
+								</Transform>
+								<Transform>
+									<name>RxNorm Hierarchy Additions</name>
+								</Transform>
+								<Transform>
+									<name>LOINC spreadsheet rules</name>
+								</Transform>
+								<Transform>
+									<name>RxNorm spreadsheet rules</name>
+								</Transform>
+							</transforms>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>classify</id>
 						<goals>
 							<goal>initialize-classifier</goal>
 							<goal>full-classification</goal>
-							<goal>index-termstore</goal>
 							<goal>stop-heap-ticker</goal>
 							<goal>stop-tasks-ticker</goal>
 							<goal>shutdown-isaac</goal>

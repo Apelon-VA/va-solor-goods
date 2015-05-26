@@ -14,8 +14,9 @@
     <name>solor-goods: (MMP)</name>
     
     <properties>
-        <isaac.mojo.version>1.7-SNAPSHOT</isaac.mojo.version>
+        <isaac-mojo.version>1.7-SNAPSHOT</isaac-mojo.version>
         <isaac-metadata.version>1.30-SNAPSHOT</isaac-metadata.version>
+        <isaac-gui.version>23.1-SNAPSHOT</isaac-gui.version>
         <query.version>2.13-SNAPSHOT</query.version>
         <logic.version>1.13-SNAPSHOT</logic.version>
         
@@ -37,7 +38,7 @@
                 <plugin>
                     <groupId>gov.vha.isaac</groupId>
                     <artifactId>isaac-mojo</artifactId>
-                    <version>${isaac.mojo.version}</version>
+                    <version>${isaac-mojo.version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>gov.vha.isaac.query-service.modules</groupId>
