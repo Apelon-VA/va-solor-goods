@@ -84,7 +84,7 @@
 		<dependency>
 			<groupId>gov.vha.isaac.terminology.converters</groupId>
 			<artifactId>term-convert-rxnorm-econcept</artifactId>
-			<version>2014.09.02-loader-4.0</version>
+			<version>2014.09.02-loader-4.1</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>gov.vha.isaac.terminology.converters</groupId>
 			<artifactId>term-convert-loinc-econcept</artifactId>
-			<version>2.48-loader-4.0</version>
+			<version>2.48-loader-4.1</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
