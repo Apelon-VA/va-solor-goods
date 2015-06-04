@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>gov.vha.solor</groupId>
 		<artifactId>solor-goods</artifactId>
-		<version>1.8</version>
+		<version>1.9</version>
 	</parent>
 	
 	<groupId>gov.vha.solor.modules</groupId>
 	<artifactId>solor-all</artifactId>
-	<name>SOLOR Nebula Database Assembly</name>
+	<name>${project.parent.artifactId}: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<description>A SOLOR database, including sct-econcept-2015.01.31-build-5-active-only, loinc-econcept-2.48-loader-3.2 and RxNormH-econcept-2014.09.02-loader-3.2</description>
@@ -17,9 +17,7 @@
 	<properties>
 		<!-- For no classifier, leave this blank or remove the property entirely-->
 		<resultArtifactClassifier>active-only</resultArtifactClassifier>
-		
-		<isaac-gui.version>Sprint_21-SNAPSHOT</isaac-gui.version>
-		
+
 		<!-- Don't edit these -->
 		<inParent>false</inParent>
 	</properties>
@@ -84,9 +82,9 @@
 		
 		<!-- RxNorm -->
 		<dependency>
-			<groupId>gov.va.oia.terminology.converters</groupId>
-			<artifactId>RxNormH-econcept</artifactId>
-			<version>2014.09.02-loader-3.2</version>
+			<groupId>gov.vha.isaac.terminology.converters</groupId>
+			<artifactId>term-convert-rxnorm-econcept</artifactId>
+			<version>2014.09.02-loader-4.1</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
@@ -94,9 +92,9 @@
 		
 		<!-- LOINC -->
 		<dependency>
-			<groupId>gov.va.oia.terminology.converters</groupId>
-			<artifactId>loinc-econcept</artifactId>
-			<version>2.48-loader-3.2</version>
+			<groupId>gov.vha.isaac.terminology.converters</groupId>
+			<artifactId>term-convert-loinc-econcept</artifactId>
+			<version>2.48-loader-4.1</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
@@ -129,7 +127,7 @@
 							<goal>unpack-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeArtifactIds>loinc-econcept</includeArtifactIds>
+							<includeArtifactIds>term-convert-loinc-econcept</includeArtifactIds>
 							<outputDirectory>${project.build.directory}/data/loinc</outputDirectory>
 						</configuration>
 					</execution>
@@ -140,7 +138,7 @@
 							<goal>unpack-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeArtifactIds>RxNormH-econcept</includeArtifactIds>
+							<includeArtifactIds>term-convert-rxnorm-econcept</includeArtifactIds>
 							<outputDirectory>${project.build.directory}/data/rxnorm</outputDirectory>
 						</configuration>
 					</execution>
@@ -150,6 +148,7 @@
 			<plugin>
 				<groupId>gov.vha.isaac</groupId>
 				<artifactId>isaac-mojo</artifactId>
+				
 				<dependencies>
 					<!-- This will go away when our constants get migrated into the metadata project -->
 					<dependency>
@@ -157,6 +156,13 @@
 						<artifactId>constants</artifactId>
 						<version>${isaac-gui.version}</version>
 					</dependency>
+					
+					<dependency>
+						<groupId>gov.vha.isaac.gui.modules</groupId>
+						<artifactId>db-processing-rules</artifactId>
+						<version>${isaac-gui.version}</version>
+					</dependency>
+					
 				</dependencies>
 				<executions>
 					<execution>
@@ -184,12 +190,6 @@
 								<classesWithconceptSpec>gov.va.isaac.constants.ISAAC</classesWithconceptSpec>
 								<classesWithconceptSpec>gov.va.isaac.constants.InformationModels</classesWithconceptSpec>
 							</classesWithConceptSpecs>
-							<terminologyRoots>
-								<MojoConceptSpec>
-									<fsn>LOINC</fsn>
-									<uuid>3958d043-9e8c-508e-bf6d-fd9c83a856da</uuid>
-								</MojoConceptSpec>
-							</terminologyRoots>
 						</configuration>
 					</execution>
 					
@@ -213,9 +213,8 @@
 								<econFileString>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</econFileString>
 								<econFileString>${project.build.directory}/data/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
 								<econFileString>${project.build.directory}/data/sctSiEConcepts.jbin</econFileString>
-								<!-- Broken at the moment -->
-								<!--econFileString>${project.build.directory}/data/rxnorm/RRF-RXN.jbin</econFileString-->
-								<!-- econFileString>${project.build.directory}/data/loinc/loincEConcepts.jbin</econFileString-->
+								<econFileString>${project.build.directory}/data/rxnorm/RRF-RXN.jbin</econFileString>
+								<econFileString>${project.build.directory}/data/loinc/loincEConcepts.jbin</econFileString>
 							</econFileStrings>
 						</configuration>
 					</execution>
@@ -228,11 +227,42 @@
 					</execution>
 					
 					<execution>
-						<id>classify-and-index</id>
+						<id>index</id>
+						<goals>
+							<goal>index-termstore</goal>
+						</goals>
+					</execution>
+					
+					<!-- Apply the Solor overlay rules -->
+					<execution>
+						<id>execute rules</id>
+						<goals>
+							<goal>execute-transforms</goal>
+						</goals>
+						<configuration>
+							<summaryOutputFolder>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/META-INF/maven/${project.groupId}/${project.artifactId}</summaryOutputFolder>
+							<transforms>
+								<Transform>
+									<name>Generate Missing Preferred Terms</name>
+								</Transform>
+								<Transform>
+									<name>RxNorm Hierarchy Additions</name>
+								</Transform>
+								<Transform>
+									<name>LOINC spreadsheet rules</name>
+								</Transform>
+								<Transform>
+									<name>RxNorm spreadsheet rules</name>
+								</Transform>
+							</transforms>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>classify</id>
 						<goals>
 							<goal>initialize-classifier</goal>
 							<goal>full-classification</goal>
-							<goal>index-termstore</goal>
 							<goal>stop-heap-ticker</goal>
 							<goal>stop-tasks-ticker</goal>
 							<goal>shutdown-isaac</goal>

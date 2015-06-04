@@ -9,15 +9,16 @@
 
     <groupId>gov.vha.solor</groupId>
     <artifactId>solor-goods</artifactId>
-    <version>1.8</version>
+    <version>1.9</version>
     <packaging>pom</packaging>
     <name>solor-goods: (MMP)</name>
     
     <properties>
-        <isaac.mojo.version>1.6</isaac.mojo.version>
-        <isaac-metadata.version>1.29</isaac-metadata.version>
-        <query.version>2.12</query.version>
-        <logic.version>1.12</logic.version>
+        <isaac-mojo.version>1.7</isaac-mojo.version>
+        <isaac-metadata.version>1.30</isaac-metadata.version>
+        <isaac-gui.version>23.1</isaac-gui.version>
+        <query.version>2.13</query.version>
+        <logic.version>1.13</logic.version>
         
         <!-- this should be overridden by a sub-mojo, if necessary - don't change it here -->
         <resultArtifactClassifier />
@@ -37,7 +38,7 @@
                 <plugin>
                     <groupId>gov.vha.isaac</groupId>
                     <artifactId>isaac-mojo</artifactId>
-                    <version>${isaac.mojo.version}</version>
+                    <version>${isaac-mojo.version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>gov.vha.isaac.query-service.modules</groupId>
@@ -149,7 +150,7 @@
                             <failIfNoMatch>false</failIfNoMatch>
                         </configuration>
                     </execution>
-                
+
                     <execution>
                         <id>attach-artifact</id>
                         <goals>
