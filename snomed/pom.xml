@@ -140,6 +140,14 @@
             <plugin>
                 <groupId>gov.vha.isaac</groupId>
                 <artifactId>isaac-mojo</artifactId>
+                <dependencies>
+                    <!-- This will go away when our constants get migrated into the metadata project -->
+                    <dependency>
+                        <groupId>gov.vha.isaac.gui.modules</groupId>
+                        <artifactId>constants</artifactId>
+                        <version>${isaac-gui.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>set-termstore-properties</id>
@@ -148,6 +156,23 @@
                         </goals>
                         <configuration>
                             <datastoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/</datastoreRootLocation>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate Concept Spec Metadata</id>
+                        <goals>
+                            <goal>generate-metadata-eConcepts</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</outputFile>
+                            <!-- These will go away when these constants get migrated -->
+                            <classesWithConceptSpecs>
+                                <classesWithconceptSpec>org.ihtsdo.otf.tcc.api.metadata.binding.RefexDynamic</classesWithconceptSpec>
+                                <classesWithconceptSpec>gov.va.isaac.constants.Search</classesWithconceptSpec>
+                                <classesWithconceptSpec>gov.va.isaac.constants.MappingConstants</classesWithconceptSpec>
+                                <classesWithconceptSpec>gov.va.isaac.constants.ISAAC</classesWithconceptSpec>
+                                <classesWithconceptSpec>gov.va.isaac.constants.InformationModels</classesWithconceptSpec>
+                            </classesWithConceptSpecs>
                         </configuration>
                     </execution>
                     <execution>
@@ -166,6 +191,7 @@
                         </goals>
                         <configuration>
                             <econFileStrings>
+                                <econFileString>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</econFileString>
                                 <econFileString>${project.build.directory}/data/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
                                 <econFileString>${project.build.directory}/data/sctSiEConcepts.jbin</econFileString>
                             </econFileStrings>
