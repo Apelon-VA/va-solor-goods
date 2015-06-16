@@ -156,6 +156,7 @@
                         </goals>
                         <configuration>
                             <datastoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/</datastoreRootLocation>
+                            <conceptModel>OTF_CONCEPT_MODEL</conceptModel>
                         </configuration>
                     </execution>
                     <execution>
