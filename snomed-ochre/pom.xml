@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>gov.vha.solor</groupId>
+        <artifactId>solor-goods</artifactId>
+        <version>1.10-SNAPSHOT</version>
+    </parent>
+    
+    <groupId>gov.vha.solor.modules</groupId>
+    <artifactId>snomed-ochre</artifactId>
+    <name>${project.parent.artifactId}: ${project.artifactId}</name>
+    <packaging>pom</packaging>
+    
+    <description>An ISAAC database, with the OCHRE concept model, including Snomed</description>
+    
+    <properties>
+        <!-- For no classifier, leave this blank or remove the property entirely-->
+        <resultArtifactClassifier>all</resultArtifactClassifier>
+
+        <!-- Don't edit these -->
+        <inParent>false</inParent>
+    </properties>
+    
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>Copyright Notice
+                This is a work of the U.S. Government and is not subject to copyright
+                protection in the United States. Foreign copyrights may apply.
+            </comments>
+        </license>
+        <license>
+            <name>SNOMED CT affiliate license agreement</name>
+            <url>https://uts.nlm.nih.gov/help/license/LicenseAgreement.pdf</url>
+            <comments>The SNOMED CT content packaged by this module is governed by the SNOMED CT affiliate license agreement</comments>
+        </license>
+    </licenses>
+    
+
+    <dependencies>
+        <!-- Metadata -->
+        <dependency>
+            <groupId>gov.vha.isaac.isaac-metadata.modules</groupId>
+            <artifactId>isaac-metadata-artifacts</artifactId>
+            <classifier>all</classifier>
+            <version>${isaac-metadata.version}</version>
+            <type>econ.zip</type>
+            <optional>true</optional> <!-- Not needed at runtime / transitively -->
+        </dependency>
+    
+        <!-- Snomed -->
+        <dependency>
+            <groupId>org.ihtsdo.sct.rf2</groupId>
+            <artifactId>rf-to-econcept-conversion</artifactId>
+            <version>1.3</version>
+            <type>zip</type>
+            <scope>test</scope>
+            <optional>true</optional> <!-- Not needed at runtime / transitively -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.ihtsdo</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>gov.vha.isaac</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--dependency>
+            <groupId>gov.va.jif.all-va-sources-wb</groupId>
+            <artifactId>content-processing-rf2</artifactId>
+            <version>3.4-prod-SNAPSHOT</version>
+            <type>zip</type>
+            <classifier>release-files</classifier>
+            <scope>test</scope>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.ihtsdo</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>gov.vha.isaac</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency-->
+
+    </dependencies>
+
+    <build>
+        <extensions>
+<!--            <extension>
+                <groupId>gov.vha.isaac</groupId>
+                <artifactId>newtons-cradle-extension</artifactId>
+                <version>${newtons-cradle.version}</version>
+            </extension>-->
+<!--            <extension>
+                <groupId>gov.vha.isaac</groupId>
+                <artifactId>query-extension</artifactId>
+                <version>${query.version}</version>
+            </extension>-->
+        </extensions>
+
+        <plugins>
+            <!-- Unpack data projects, load econcepts files,repack database -->
+           <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>extract-econcept</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>rf-to-econcept-conversion,isaac-metadata-artifacts</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/data</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <!--execution>
+                        <id>extract-va-extension</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>content-processing-rf2</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/data/va-extension</outputDirectory>
+                        </configuration>
+                    </execution-->
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>gov.vha.isaac</groupId>
+                <artifactId>isaac-mojo</artifactId>
+                <dependencies>
+                    <!-- This will go away when our constants get migrated into the metadata project -->
+                    <dependency>
+                        <groupId>gov.vha.isaac.gui.modules</groupId>
+                        <artifactId>constants</artifactId>
+                        <version>${isaac-gui.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>set-termstore-properties</id>
+                        <goals>
+                            <goal>set-termstore-properties</goal>
+                        </goals>
+                        <configuration>
+                            <datastoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/</datastoreRootLocation>
+                            <conceptModel>OCHRE_CONCEPT_MODEL</conceptModel>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate Concept Spec Metadata</id>
+                        <goals>
+                            <goal>generate-metadata-eConcepts</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</outputFile>
+                            <!-- These will go away when these constants get migrated -->
+                            <classesWithConceptSpecs>
+                                <classesWithconceptSpec>org.ihtsdo.otf.tcc.api.metadata.binding.RefexDynamic</classesWithconceptSpec>
+                                <classesWithconceptSpec>gov.va.isaac.constants.Search</classesWithconceptSpec>
+                                <classesWithconceptSpec>gov.va.isaac.constants.MappingConstants</classesWithconceptSpec>
+                                <classesWithconceptSpec>gov.va.isaac.constants.ISAAC</classesWithconceptSpec>
+                                <classesWithconceptSpec>gov.va.isaac.constants.InformationModels</classesWithconceptSpec>
+                            </classesWithConceptSpecs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>start-termstore</id>
+                        <goals>
+                            <goal>startup-isaac</goal>
+                            <goal>start-heap-ticker</goal>
+                            <goal>start-tasks-ticker</goal>
+                            <goal>count-concepts</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>load-onto-development</id>
+                        <goals>
+                            <goal>load-onto-development</goal>
+                        </goals>
+                        <configuration>
+                            <econFileStrings>
+                                <econFileString>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</econFileString>
+                                <econFileString>${project.build.directory}/data/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
+                                <econFileString>${project.build.directory}/data/sctSiEConcepts.jbin</econFileString>
+                            </econFileStrings>
+                            <conceptModelString>OCHRE_CONCEPT_MODEL</conceptModelString>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>count-after-load</id>
+                        <goals>
+                            <goal>count-concepts</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>classify-and-index</id>
+                        <goals>
+                            <goal>full-classification</goal>
+                            <goal>index-termstore</goal>
+                            <goal>stop-heap-ticker</goal>
+                            <goal>stop-tasks-ticker</goal>
+                            <goal>shutdown-isaac</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
