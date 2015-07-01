@@ -6,7 +6,7 @@
     <parent>
         <groupId>gov.vha.solor</groupId>
         <artifactId>solor-goods</artifactId>
-        <version>1.10-SNAPSHOT</version>
+        <version>1.11-SNAPSHOT</version>
     </parent>
     
     <groupId>gov.vha.solor.modules</groupId>
@@ -95,18 +95,6 @@
     </dependencies>
 
     <build>
-        <extensions>
-<!--            <extension>
-                <groupId>gov.vha.isaac</groupId>
-                <artifactId>newtons-cradle-extension</artifactId>
-                <version>${newtons-cradle.version}</version>
-            </extension>-->
-<!--            <extension>
-                <groupId>gov.vha.isaac</groupId>
-                <artifactId>query-extension</artifactId>
-                <version>${query.version}</version>
-            </extension>-->
-        </extensions>
 
         <plugins>
             <!-- Unpack data projects, load econcepts files,repack database -->
@@ -152,17 +140,19 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>set-termstore-properties</id>
+                        <id>set-termstore-properties-ochre</id>
                         <goals>
                             <goal>set-termstore-properties</goal>
                         </goals>
                         <configuration>
                             <datastoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/</datastoreRootLocation>
+                            <termstoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/object-chronicles/</termstoreRootLocation>
+                            <searchRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/search/</searchRootLocation>
                             <conceptModel>OCHRE_CONCEPT_MODEL</conceptModel>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>generate Concept Spec Metadata</id>
+                        <id>generate Concept Spec Metadata-ochre</id>
                         <goals>
                             <goal>generate-metadata-eConcepts</goal>
                         </goals>
@@ -179,7 +169,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>start-termstore</id>
+                        <id>start-termstore-ochre</id>
                         <goals>
                             <goal>startup-isaac</goal>
                             <goal>start-heap-ticker</goal>
@@ -188,7 +178,7 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>load-onto-development</id>
+                        <id>load-onto-development-ochre</id>
                         <goals>
                             <goal>load-onto-development</goal>
                         </goals>
@@ -202,13 +192,13 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>count-after-load</id>
+                        <id>count-after-load-ochre</id>
                         <goals>
                             <goal>count-concepts</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>classify-and-index</id>
+                        <id>classify-and-index-ochre</id>
                         <goals>
                             <goal>full-classification</goal>
                             <goal>index-termstore</goal>

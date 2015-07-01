@@ -93,18 +93,7 @@
     </dependencies>
 
     <build>
-        <extensions>
-<!--            <extension>
-                <groupId>gov.vha.isaac</groupId>
-                <artifactId>newtons-cradle-extension</artifactId>
-                <version>${newtons-cradle.version}</version>
-            </extension>-->
-<!--            <extension>
-                <groupId>gov.vha.isaac</groupId>
-                <artifactId>query-extension</artifactId>
-                <version>${query.version}</version>
-            </extension>-->
-        </extensions>
+
 
         <plugins>
             <!-- Unpack data projects, load econcepts files,repack database -->
@@ -156,6 +145,8 @@
                         </goals>
                         <configuration>
                             <datastoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/</datastoreRootLocation>
+                            <termstoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/object-chronicles/</termstoreRootLocation>
+                            <searchRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/search/</searchRootLocation>
                             <conceptModel>OTF_CONCEPT_MODEL</conceptModel>
                         </configuration>
                     </execution>
