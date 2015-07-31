@@ -236,7 +236,7 @@
 					</execution>
 					
 					<!-- Apply the Solor overlay rules -->
-					<execution>
+					<!--execution>  Broken at the moment
 						<id>execute rules</id>
 						<goals>
 							<goal>execute-transforms</goal>
@@ -258,7 +258,7 @@
 								</Transform>
 							</transforms>
 						</configuration>
-					</execution>
+					</execution-->
 					
 					<execution>
 						<id>classify</id>
