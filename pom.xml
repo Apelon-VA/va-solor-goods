@@ -185,7 +185,6 @@
 
     <modules>
         <module>snomed</module>
-        <module>snomed-ochre</module>
         <module>rxnorm</module>
         <module>loinc</module>
         <module>fusion</module>

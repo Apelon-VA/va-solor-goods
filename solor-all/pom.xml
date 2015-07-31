@@ -172,7 +172,7 @@
 						</goals>
 						<configuration>
 							<datastoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/</datastoreRootLocation>
-							<conceptModel>OTF_CONCEPT_MODEL</conceptModel>
+							<conceptModel>OCHRE_CONCEPT_MODEL</conceptModel>
 						</configuration>
 					</execution>
 					
@@ -217,6 +217,7 @@
 								<econFileString>${project.build.directory}/data/rxnorm/RRF-RXN.jbin</econFileString>
 								<econFileString>${project.build.directory}/data/loinc/loincEConcepts.jbin</econFileString>
 							</econFileStrings>
+							<conceptModelString>OCHRE_CONCEPT_MODEL</conceptModelString>
 						</configuration>
 					</execution>
 					
