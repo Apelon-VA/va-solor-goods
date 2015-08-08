@@ -1,31 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
         <action>
-            <actionName>CUSTOM-clean install 8g</actionName>
-            <displayName>clean install 8g</displayName>
-            <goals>
-                <goal>-e</goal>
-                <goal>clean</goal>
-                <goal>install</goal>
-            </goals>
-            <properties>
-                <Env.MAVEN_OPTS>-Xmx12g -Xms12g</Env.MAVEN_OPTS>
-                
-                
-                
-                
-                
-            </properties>
-        </action>
-        <action>
             <actionName>CUSTOM-jgitflow:release-start</actionName>
             <displayName>jgitflow:release-start</displayName>
             <goals>
                 <goal>clean</goal>
                 <goal>jgitflow:release-start</goal>
+                
             </goals>
             <properties>
                 <Env.MAVEN_OPTS>-Xmx8g -Xms8g</Env.MAVEN_OPTS>
+                
+                
+                
+                
+                
             </properties>
         </action>
         <action>
@@ -49,6 +38,9 @@
                 <goal>clean</goal>
                 <goal>install</goal>
             </goals>
+            <properties>
+                <Env.MAVEN_OPTS>-Xmx16g -Xms16g</Env.MAVEN_OPTS>
+            </properties>
         </action>
         <action>
             <actionName>build-with-dependencies</actionName>
@@ -59,6 +51,23 @@
             <goals>
                 <goal>-e</goal>
                 <goal>install</goal>
+                
             </goals>
+            <properties>
+                <Env.MAVEN_OPTS>-Xmx16g -Xms16g</Env.MAVEN_OPTS>
+            </properties>
+        </action>
+        <action>
+            <actionName>build</actionName>
+            <packagings>
+                <packaging>*</packaging>
+            </packagings>
+            <goals>
+                <goal>install</goal>
+                
+            </goals>
+            <properties>
+                <Env.MAVEN_OPTS>-Xmx16g -Xms16g</Env.MAVEN_OPTS>
+            </properties>
         </action>
     </actions>
