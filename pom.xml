@@ -16,7 +16,6 @@
     <properties>
         <isaac-mojo.version>1.10-SNAPSHOT</isaac-mojo.version>
         <isaac-metadata.version>1.33-SNAPSHOT</isaac-metadata.version>
-        <isaac-gui.version>23.4-SNAPSHOT</isaac-gui.version>
         <query.version>2.16-SNAPSHOT</query.version>
         <logic.version>1.16-SNAPSHOT</logic.version>
         
