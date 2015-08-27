@@ -173,7 +173,6 @@
                     <execution>
                         <id>classify-and-index</id>
                         <goals>
-                            <goal>initialize-classifier</goal>
                             <goal>full-classification</goal>
                             <goal>index-termstore</goal>
                             <goal>stop-heap-ticker</goal>
