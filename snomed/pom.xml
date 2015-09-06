@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.vha.solor</groupId>
         <artifactId>solor-goods</artifactId>
-        <version>1.11</version>
+        <version>1.12</version>
     </parent>
     
     <groupId>gov.vha.solor.modules</groupId>
@@ -53,22 +53,13 @@
     
         <!-- Snomed -->
         <dependency>
-            <groupId>org.ihtsdo.sct.rf2</groupId>
-            <artifactId>rf-to-econcept-conversion</artifactId>
-            <version>1.3</version>
-            <type>zip</type>
-            <scope>test</scope>
+            <groupId>gov.vha.isaac.terminology.converters</groupId>
+            <artifactId>term-convert-rf2-econcept-sct</artifactId>
+            <version>20150731-loader-2.1</version>
+            <type>jbin.zip</type>
+            <classifier>Full</classifier>
             <optional>true</optional> <!-- Not needed at runtime / transitively -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ihtsdo</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>gov.vha.isaac</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <scope>compile</scope>
         </dependency>
         <!--dependency>
             <groupId>gov.va.jif.all-va-sources-wb</groupId>
@@ -108,7 +99,7 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>rf-to-econcept-conversion,isaac-metadata-artifacts</includeArtifactIds>
+                            <includeArtifactIds>term-convert-rf2-econcept-sct,isaac-metadata-artifacts</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/data</outputDirectory>
                         </configuration>
                     </execution>
@@ -129,14 +120,6 @@
             <plugin>
                 <groupId>gov.vha.isaac</groupId>
                 <artifactId>isaac-mojo</artifactId>
-                <dependencies>
-                    <!-- This will go away when our constants get migrated into the metadata project -->
-                    <dependency>
-                        <groupId>gov.vha.isaac.gui.modules</groupId>
-                        <artifactId>constants</artifactId>
-                        <version>${isaac-gui.version}</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
                         <id>set-termstore-properties-ochre</id>
@@ -148,23 +131,6 @@
                             <termstoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/object-chronicles/</termstoreRootLocation>
                             <searchRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/search/</searchRootLocation>
                             <conceptModel>OCHRE_CONCEPT_MODEL</conceptModel>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate Concept Spec Metadata</id>
-                        <goals>
-                            <goal>generate-metadata-eConcepts</goal>
-                        </goals>
-                        <configuration>
-                            <outputFile>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</outputFile>
-                            <!-- These will go away when these constants get migrated -->
-                            <classesWithConceptSpecs>
-                                <classesWithconceptSpec>org.ihtsdo.otf.tcc.api.metadata.binding.RefexDynamic</classesWithconceptSpec>
-                                <classesWithconceptSpec>gov.va.isaac.constants.Search</classesWithconceptSpec>
-                                <classesWithconceptSpec>gov.va.isaac.constants.MappingConstants</classesWithconceptSpec>
-                                <classesWithconceptSpec>gov.va.isaac.constants.ISAAC</classesWithconceptSpec>
-                                <classesWithconceptSpec>gov.va.isaac.constants.InformationModels</classesWithconceptSpec>
-                            </classesWithConceptSpecs>
                         </configuration>
                     </execution>
                     <execution>
@@ -183,9 +149,8 @@
                         </goals>
                         <configuration>
                             <econFileStrings>
-                                <econFileString>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</econFileString>
                                 <econFileString>${project.build.directory}/data/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
-                                <econFileString>${project.build.directory}/data/sctSiEConcepts.jbin</econFileString>
+                                <econFileString>${project.build.directory}/data/SnomedCoreEConcepts.jbin</econFileString>
                             </econFileStrings>
                             <conceptModelString>OCHRE_CONCEPT_MODEL</conceptModelString>
                         </configuration>
@@ -199,7 +164,6 @@
                     <execution>
                         <id>classify-and-index</id>
                         <goals>
-                            <goal>initialize-classifier</goal>
                             <goal>full-classification</goal>
                             <goal>index-termstore</goal>
                             <goal>stop-heap-ticker</goal>

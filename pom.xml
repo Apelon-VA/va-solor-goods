@@ -4,21 +4,20 @@
     <parent>
         <groupId>gov.vha.isaac</groupId>
         <artifactId>isaac-parent</artifactId>
-        <version>1.8</version>
+        <version>1.9</version>
     </parent>
 
     <groupId>gov.vha.solor</groupId>
     <artifactId>solor-goods</artifactId>
-    <version>1.11</version>
+    <version>1.12</version>
     <packaging>pom</packaging>
     <name>solor-goods: (MMP)</name>
     
     <properties>
-        <isaac-mojo.version>1.9</isaac-mojo.version>
-        <isaac-metadata.version>1.32</isaac-metadata.version>
-        <isaac-gui.version>23.3</isaac-gui.version>
-        <query.version>2.15</query.version>
-        <logic.version>1.15</logic.version>
+        <isaac-mojo.version>1.11</isaac-mojo.version>
+        <isaac-metadata.version>1.35</isaac-metadata.version>
+        <query.version>2.16</query.version>
+        <logic.version>1.16</logic.version>
         
         <!-- this should be overridden by a sub-mojo, if necessary - don't change it here -->
         <resultArtifactClassifier />

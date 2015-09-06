@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>gov.vha.solor</groupId>
 		<artifactId>solor-goods</artifactId>
-		<version>1.11-SNAPSHOT</version>
+		<version>1.12-SNAPSHOT</version>
 	</parent>
 	
 	<groupId>gov.vha.solor.modules</groupId>
@@ -12,7 +12,7 @@
 	<name>${project.parent.artifactId}: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
-	<description>A SOLOR database, including sct-econcept-2015.01.31-build-5-active-only, loinc-econcept-2.48-loader-3.2 and RxNormH-econcept-2014.09.02-loader-3.2</description>
+	<description>A SOLOR database, including sct-econcept-2015.01.31-build-5-active-only, loinc-econcept-2.52-loader-4.2-SNAPSHOT and RxNormH-econcept-2015.08.03-loader-4.2-SNAPSHOT</description>
 
 	<properties>
 		<!-- For no classifier, leave this blank or remove the property entirely-->
@@ -84,7 +84,7 @@
 		<dependency>
 			<groupId>gov.vha.isaac.terminology.converters</groupId>
 			<artifactId>term-convert-rxnorm-econcept</artifactId>
-			<version>2014.09.02-loader-4.1</version>
+			<version>2015.08.03-loader-4.2-SNAPSHOT</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>gov.vha.isaac.terminology.converters</groupId>
 			<artifactId>term-convert-loinc-econcept</artifactId>
-			<version>2.48-loader-4.1</version>
+			<version>2.52-loader-4.2-SNAPSHOT</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
@@ -150,18 +150,12 @@
 				<artifactId>isaac-mojo</artifactId>
 				
 				<dependencies>
-					<!-- This will go away when our constants get migrated into the metadata project -->
-					<dependency>
-						<groupId>gov.vha.isaac.gui.modules</groupId>
-						<artifactId>constants</artifactId>
-						<version>${isaac-gui.version}</version>
-					</dependency>
 					
-					<dependency>
+					<!--  TODO move this out of isaac-gui  dependency>
 						<groupId>gov.vha.isaac.gui.modules</groupId>
 						<artifactId>db-processing-rules</artifactId>
 						<version>${isaac-gui.version}</version>
-					</dependency>
+					</dependency-->
 					
 				</dependencies>
 				<executions>
@@ -172,28 +166,9 @@
 						</goals>
 						<configuration>
 							<datastoreRootLocation>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/</datastoreRootLocation>
-							<conceptModel>OCHRE_CONCEPT_MODEL</conceptModel>
 						</configuration>
 					</execution>
-					
-					<execution>
-						<id>generate Concept Spec Metadata</id>
-						<goals>
-							<goal>generate-metadata-eConcepts</goal>
-						</goals>
-						<configuration>
-							<outputFile>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</outputFile>
-							<!-- These will go away when these constants get migrated -->
-							<classesWithConceptSpecs>
-								<classesWithconceptSpec>org.ihtsdo.otf.tcc.api.metadata.binding.RefexDynamic</classesWithconceptSpec>
-								<classesWithconceptSpec>gov.va.isaac.constants.Search</classesWithconceptSpec>
-								<classesWithconceptSpec>gov.va.isaac.constants.MappingConstants</classesWithconceptSpec>
-								<classesWithconceptSpec>gov.va.isaac.constants.ISAAC</classesWithconceptSpec>
-								<classesWithconceptSpec>gov.va.isaac.constants.InformationModels</classesWithconceptSpec>
-							</classesWithConceptSpecs>
-						</configuration>
-					</execution>
-					
+
 					<execution>
 						<id>start-termstore</id>
 						<goals>
@@ -211,13 +186,11 @@
 						</goals>
 						<configuration>
 							<econFileStrings>
-								<econFileString>${project.build.directory}/data/isaac/metadata/econ/conceptSpec.econ</econFileString>
 								<econFileString>${project.build.directory}/data/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
 								<econFileString>${project.build.directory}/data/sctSiEConcepts.jbin</econFileString>
 								<econFileString>${project.build.directory}/data/rxnorm/RRF-RXN.jbin</econFileString>
 								<econFileString>${project.build.directory}/data/loinc/loincEConcepts.jbin</econFileString>
 							</econFileStrings>
-							<conceptModelString>OCHRE_CONCEPT_MODEL</conceptModelString>
 						</configuration>
 					</execution>
 					
@@ -263,7 +236,6 @@
 					<execution>
 						<id>classify</id>
 						<goals>
-							<goal>initialize-classifier</goal>
 							<goal>full-classification</goal>
 							<goal>stop-heap-ticker</goal>
 							<goal>stop-tasks-ticker</goal>
