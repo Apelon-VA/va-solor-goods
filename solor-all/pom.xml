@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>gov.vha.solor</groupId>
 		<artifactId>solor-goods</artifactId>
-		<version>1.12-SNAPSHOT</version>
+		<version>1.13-SNAPSHOT</version>
 	</parent>
 	
 	<groupId>gov.vha.solor.modules</groupId>
@@ -12,11 +12,15 @@
 	<name>${project.parent.artifactId}: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
-	<description>A SOLOR database, including sct-econcept-2015.01.31-build-5-active-only, loinc-econcept-2.52-loader-4.2-SNAPSHOT and RxNormH-econcept-2015.08.03-loader-4.2-SNAPSHOT</description>
+	<description>A SOLOR database, including term-convert-rf2-econcept-sct-20150731-loader-2.2, loinc-econcept-2.52-loader-4.2 and RxNormH-econcept-2015.08.03-loader-4.2</description>
 
 	<properties>
 		<!-- For no classifier, leave this blank or remove the property entirely-->
-		<resultArtifactClassifier>active-only</resultArtifactClassifier>
+		<resultArtifactClassifier>all</resultArtifactClassifier>
+		<loinc-loader.version>1.0-SNAPSHOT</loinc-loader.version>
+		<rxnorm-loader.version>4.3-SNAPSHOT</rxnorm-loader.version>
+		
+		<!-- Don't use properties for content versions, otherwise, we can't (currently) read them from ISAAC GUI code -->
 
 		<!-- Don't edit these -->
 		<inParent>false</inParent>
@@ -62,43 +66,63 @@
 
 		<!-- Snomed -->
 		<dependency>
-			<groupId>org.ihtsdo.sct.rf2</groupId>
-			<artifactId>rf-to-econcept-conversion</artifactId>
-			<version>1.3</version>
-			<type>zip</type>
-			<scope>test</scope>
+			<groupId>gov.vha.isaac.terminology.converters</groupId>
+			<artifactId>term-convert-rf2-econcept-sct</artifactId>
+			<version>20150731-loader-2.2</version>
+			<type>jbin.zip</type>
+			<classifier>Full</classifier>
 			<optional>true</optional> <!-- Not needed at runtime / transitively -->
-			<exclusions>
-				<exclusion>
-					<groupId>org.ihtsdo</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>gov.vha.isaac</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
+			<scope>compile</scope>
 		</dependency>
 		
 		<!-- RxNorm -->
 		<dependency>
 			<groupId>gov.vha.isaac.terminology.converters</groupId>
 			<artifactId>term-convert-rxnorm-econcept</artifactId>
-			<version>2015.08.03-loader-4.2-SNAPSHOT</version>
+			<version>2015.08.03-loader-4.3-SNAPSHOT</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
 		</dependency>
 		
 		<!-- LOINC -->
+		
 		<dependency>
 			<groupId>gov.vha.isaac.terminology.converters</groupId>
+			<artifactId>term-convert-loincTP-mojo</artifactId>
+			<version>${loinc-loader.version}</version>
+			<scope>compile</scope>
+			<optional>true</optional>  <!-- Not needed at runtime -->
+		</dependency>
+		
+		<dependency>
+			<groupId>gov.vha.isaac.terminology.source</groupId>
+			<artifactId>term-convert-loincTP-src-data</artifactId>
+			<version>2015.08</version>
+			<type>zip</type>
+			<scope>compile</scope>
+			<optional>true</optional><!-- Not needed at runtime -->
+		</dependency>
+
+		<dependency>
+			<groupId>gov.va.oia.terminology.source.loinc</groupId>  <!-- TODO this will be wrong with the next release of src data -->
+			<artifactId>loinc-src-data</artifactId>
+			<version>2.52</version>
+			<type>zip</type>
+			<scope>compile</scope>
+			<optional>true</optional><!-- Not needed at runtime -->
+		</dependency>
+		
+		<!-- Old, eConcept file -->
+		<!--dependency>
+			<groupId>gov.vha.isaac.terminology.converters</groupId>
 			<artifactId>term-convert-loinc-econcept</artifactId>
-			<version>2.52-loader-4.2-SNAPSHOT</version>
+			<version>2.52-loader-4.3-SNAPSHOT</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
-			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
-		</dependency>
+			<optional>true</optional>  <!- - Not needed at runtime / transitively - ->
+		</dependency-->
+		
 	</dependencies>
 
 	
@@ -116,19 +140,30 @@
 							<goal>unpack-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeArtifactIds>rf-to-econcept-conversion,isaac-metadata-artifacts</includeArtifactIds>
-							<outputDirectory>${project.build.directory}/data</outputDirectory>
+							<includeArtifactIds>term-convert-rf2-econcept-sct,isaac-metadata-artifacts</includeArtifactIds>
+							<outputDirectory>${project.build.directory}/generated-resources/econ</outputDirectory>
 						</configuration>
 					</execution>
 					<execution>
-						<id>extract-loinc-econcept</id>
+						<id>extract-loincTP-econcept</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>unpack-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeArtifactIds>term-convert-loinc-econcept</includeArtifactIds>
-							<outputDirectory>${project.build.directory}/data/loinc</outputDirectory>
+							<includeArtifactIds>term-convert-loincTP-src-data</includeArtifactIds>
+							<outputDirectory>${project.build.directory}/generated-resources/loincTP</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>extract-loinc-src</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeArtifactIds>loinc-src-data</includeArtifactIds>
+							<outputDirectory>${project.build.directory}/generated-resources/loinc</outputDirectory>
 						</configuration>
 					</execution>
 					<execution>
@@ -139,7 +174,7 @@
 						</goals>
 						<configuration>
 							<includeArtifactIds>term-convert-rxnorm-econcept</includeArtifactIds>
-							<outputDirectory>${project.build.directory}/data/rxnorm</outputDirectory>
+							<outputDirectory>${project.build.directory}/generated-resources/rxnorm</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -148,16 +183,31 @@
 			<plugin>
 				<groupId>gov.vha.isaac</groupId>
 				<artifactId>isaac-mojo</artifactId>
-				
 				<dependencies>
-					
-					<!--  TODO move this out of isaac-gui  dependency>
-						<groupId>gov.vha.isaac.gui.modules</groupId>
-						<artifactId>db-processing-rules</artifactId>
-						<version>${isaac-gui.version}</version>
-					</dependency-->
-					
+					<dependency>
+						<groupId>gov.vha.isaac.query-service.modules</groupId>
+						<artifactId>query-implementation</artifactId>
+						<version>${query.version}</version>
+						<optional>true</optional>
+					</dependency>
+					<dependency>
+						<groupId>gov.vha.isaac.logic.modules</groupId>
+						<artifactId>logic</artifactId>
+						<version>${logic.version}</version>
+						<optional>true</optional>
+					</dependency>
+					<dependency>
+						<groupId>gov.vha.isaac.terminology.converters</groupId>
+						<artifactId>term-convert-loincTP-mojo</artifactId>
+						<version>${loinc-loader.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>gov.vha.isaac.terminology.converters</groupId>
+						<artifactId>term-convert-rxnorm-mojo</artifactId>
+						<version>${rxnorm-loader.version}</version>
+					</dependency>
 				</dependencies>
+
 				<executions>
 					<execution>
 						<id>set-termstore-properties</id>
@@ -186,10 +236,9 @@
 						</goals>
 						<configuration>
 							<econFileStrings>
-								<econFileString>${project.build.directory}/data/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
-								<econFileString>${project.build.directory}/data/sctSiEConcepts.jbin</econFileString>
-								<econFileString>${project.build.directory}/data/rxnorm/RRF-RXN.jbin</econFileString>
-								<econFileString>${project.build.directory}/data/loinc/loincEConcepts.jbin</econFileString>
+								<econFileString>${project.build.directory}/generated-resources/econ/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
+								<econFileString>${project.build.directory}/generated-resources/econ/SnomedCoreEConcepts.jbin</econFileString>
+								<econFileString>${project.build.directory}/generated-resources/rxnorm/RRF-RXN.jbin</econFileString>
 							</econFileStrings>
 						</configuration>
 					</execution>
@@ -198,45 +247,49 @@
 						<id>count-after-load</id>
 						<goals>
 							<goal>count-concepts</goal>
+							<goal>index-termstore</goal> <!-- Index is required for the next step -->
 						</goals>
 					</execution>
 					
 					<execution>
-						<id>index</id>
+						<id>loadRxNormDomains</id>
 						<goals>
-							<goal>index-termstore</goal>
-						</goals>
-					</execution>
-					
-					<!-- Apply the Solor overlay rules -->
-					<!--execution>  Broken at the moment
-						<id>execute rules</id>
-						<goals>
-							<goal>execute-transforms</goal>
+							<goal>quasi-mojo-executor</goal>
 						</goals>
 						<configuration>
-							<summaryOutputFolder>${project.build.directory}/${project.build.finalName}${resultArtifactClassifierWithLeadingHyphen}.data/META-INF/maven/${project.groupId}/${project.artifactId}</summaryOutputFolder>
-							<transforms>
-								<Transform>
-									<name>Generate Missing Preferred Terms</name>
-								</Transform>
-								<Transform>
-									<name>RxNorm Hierarchy Additions</name>
-								</Transform>
-								<Transform>
-									<name>LOINC spreadsheet rules</name>
-								</Transform>
-								<Transform>
-									<name>RxNorm spreadsheet rules</name>
-								</Transform>
-							</transforms>
+							<quasiMojoName>load-rxnorm-logic-graphs</quasiMojoName>
+							<parameters>
+							</parameters>
 						</configuration>
-					</execution-->
+					</execution>
 					
 					<execution>
-						<id>classify</id>
+						<id>loadLoincContent</id>
+						<goals>
+							<goal>quasi-mojo-executor</goal>
+						</goals>
+						<configuration>
+							<quasiMojoName>load-loinc-tech-preview</quasiMojoName>
+							<parameters>
+								<loincFileLocation>${project.build.directory}/generated-resources/loinc</loincFileLocation>
+								<loincTPFileLocation>${project.build.directory}/generated-resources/loincTP</loincTPFileLocation>
+								<loaderVersion>${loinc-loader.version}</loaderVersion>
+							</parameters>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>count-after-loinc-load</id>
+						<goals>
+							<goal>count-concepts</goal>
+						</goals>
+					</execution>
+					
+					<execution>
+						<id>classify-and-index</id>
 						<goals>
 							<goal>full-classification</goal>
+							<goal>index-termstore</goal>  <!-- Reindex, to index the new loinc content -->
 							<goal>stop-heap-ticker</goal>
 							<goal>stop-tasks-ticker</goal>
 							<goal>shutdown-isaac</goal>
