@@ -55,7 +55,18 @@
         <dependency>
             <groupId>gov.vha.isaac.terminology.converters</groupId>
             <artifactId>term-convert-rf2-econcept-sct</artifactId>
-            <version>20150731-loader-2.1</version>
+            <version>20150731-loader-2.2-SNAPSHOT</version>
+            <type>jbin.zip</type>
+            <classifier>Full</classifier>
+            <optional>true</optional> <!-- Not needed at runtime / transitively -->
+            <scope>compile</scope>
+        </dependency>
+        
+        <!-- US Extension -->
+        <dependency>
+            <groupId>gov.vha.isaac.terminology.converters</groupId>
+            <artifactId>term-convert-rf2-econcept-us-extension</artifactId>
+            <version>20150301-loader-2.2-SNAPSHOT</version>
             <type>jbin.zip</type>
             <classifier>Full</classifier>
             <optional>true</optional> <!-- Not needed at runtime / transitively -->
@@ -99,7 +110,7 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>term-convert-rf2-econcept-sct,isaac-metadata-artifacts</includeArtifactIds>
+                            <includeArtifactIds>term-convert-rf2-econcept-sct,term-convert-rf2-econcept-us-extension,isaac-metadata-artifacts</includeArtifactIds>
                             <outputDirectory>${project.build.directory}/data</outputDirectory>
                         </configuration>
                     </execution>
@@ -151,6 +162,7 @@
                             <econFileStrings>
                                 <econFileString>${project.build.directory}/data/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
                                 <econFileString>${project.build.directory}/data/SnomedCoreEConcepts.jbin</econFileString>
+                                <econFileString>${project.build.directory}/data/USExtensionEConcepts.jbin</econFileString>
                             </econFileStrings>
                             <conceptModelString>OCHRE_CONCEPT_MODEL</conceptModelString>
                         </configuration>
