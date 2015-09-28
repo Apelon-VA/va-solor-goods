@@ -17,8 +17,8 @@
 	<properties>
 		<!-- For no classifier, leave this blank or remove the property entirely-->
 		<resultArtifactClassifier>all</resultArtifactClassifier>
-		<loinc-loader.version>1.0</loinc-loader.version>
-		<rxnorm-loader.version>4.3</rxnorm-loader.version>
+		<loinc-loader.version>1.1-SNAPSHOT</loinc-loader.version>
+		<rxnorm-loader.version>4.4-SNAPSHOT</rxnorm-loader.version>
 		
 		<!-- Don't use properties for content versions, otherwise, we can't (currently) read them from ISAAC GUI code -->
 
