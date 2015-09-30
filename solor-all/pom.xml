@@ -79,7 +79,7 @@
 		<dependency>
 			<groupId>gov.vha.isaac.terminology.converters</groupId>
 			<artifactId>term-convert-rxnorm-econcept</artifactId>
-			<version>2015.08.03-loader-4.3</version>
+			<version>2015.08.03-loader-4.4-SNAPSHOT</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
@@ -241,7 +241,7 @@
 						</goals>
 					</execution>
 					
-					<!--execution>
+					<execution>
 						<id>loadRxNormDomains</id>
 						<goals>
 							<goal>quasi-mojo-executor</goal>
@@ -251,7 +251,7 @@
 							<parameters>
 							</parameters>
 						</configuration>
-					</execution-->
+					</execution>
 					
 					<execution>
 						<id>loadLoincContent</id>
