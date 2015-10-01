@@ -9,7 +9,7 @@
 
     <groupId>gov.vha.solor</groupId>
     <artifactId>solor-goods</artifactId>
-    <version>1.15-SNAPSHOT</version>
+    <version>1.14</version>
     <packaging>pom</packaging>
     <name>solor-goods: (MMP)</name>
     
