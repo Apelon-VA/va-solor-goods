@@ -11,4 +11,4 @@ the parent pom expects the child modules to have certain files in certain places
 
 
 Release Note:
-mvn jgitflow:release-start jgitflow:release-finish -DreleaseVersion=1.13 -DdevelopmentVersion=1.14-SNAPSHOT -DaltDeploymentRepository=maestro::default::https://va.maestrodev.com/archiva/repository/va-releases  -DdefaultOriginUrl=https://github.com/Apelon-VA/va-solor-goods.git
+mvn jgitflow:release-start jgitflow:release-finish -DreleaseVersion=1.14 -DdevelopmentVersion=1.15-SNAPSHOT -DaltDeploymentRepository=maestro::default::https://va.maestrodev.com/archiva/repository/va-releases  -DdefaultOriginUrl=https://github.com/Apelon-VA/va-solor-goods.git

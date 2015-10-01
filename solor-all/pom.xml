@@ -12,13 +12,16 @@
 	<name>${project.parent.artifactId}: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
-	<description>A SOLOR database, including term-convert-rf2-econcept-sct-20150731-loader-2.2, loinc-econcept-2.52-loader-4.3 and RxNormH-econcept-2015.08.03-loader-4.3</description>
+	<description>
+		A SOLOR database, including term-convert-rf2-econcept-sct-20150731-loader-2.2, loinc-econcept-2.52-loader-1.1, us extension 20150301-loader-2.2 
+		and RxNorm-econcept-2015.08.03-loader-4.4
+	</description>
 
 	<properties>
 		<!-- For no classifier, leave this blank or remove the property entirely-->
 		<resultArtifactClassifier>all</resultArtifactClassifier>
-		<loinc-loader.version>1.1-SNAPSHOT</loinc-loader.version>
-		<rxnorm-loader.version>4.4-SNAPSHOT</rxnorm-loader.version>
+		<loinc-loader.version>1.1</loinc-loader.version>
+		<rxnorm-loader.version>4.4</rxnorm-loader.version>
 		
 		<!-- Don't use properties for content versions, otherwise, we can't (currently) read them from ISAAC GUI code -->
 
@@ -75,11 +78,22 @@
 			<scope>compile</scope>
 		</dependency>
 		
+		<!-- US Extension -->
+		<dependency>
+			<groupId>gov.vha.isaac.terminology.converters</groupId>
+			<artifactId>term-convert-rf2-econcept-us-extension</artifactId>
+			<version>20150301-loader-2.2</version>
+			<type>jbin.zip</type>
+			<classifier>Full</classifier>
+			<optional>true</optional> <!-- Not needed at runtime / transitively -->
+			<scope>compile</scope>
+		</dependency>
+		
 		<!-- RxNorm -->
 		<dependency>
 			<groupId>gov.vha.isaac.terminology.converters</groupId>
 			<artifactId>term-convert-rxnorm-econcept</artifactId>
-			<version>2015.08.03-loader-4.4-SNAPSHOT</version>
+			<version>2015.08.03-loader-4.4</version>
 			<type>jbin.zip</type>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime / transitively -->
@@ -130,7 +144,7 @@
 							<goal>unpack-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeArtifactIds>term-convert-rf2-econcept-sct,isaac-metadata-artifacts</includeArtifactIds>
+							<includeArtifactIds>term-convert-rf2-econcept-sct,term-convert-rf2-econcept-us-extension,isaac-metadata-artifacts</includeArtifactIds>
 							<outputDirectory>${project.build.directory}/generated-resources/econ</outputDirectory>
 						</configuration>
 					</execution>
@@ -228,7 +242,9 @@
 							<econFileStrings>
 								<econFileString>${project.build.directory}/generated-resources/econ/isaac/metadata/econ/IsaacMetadataAuxiliary.econ</econFileString>
 								<econFileString>${project.build.directory}/generated-resources/econ/SnomedCoreEConcepts.jbin</econFileString>
+								<econFileString>${project.build.directory}/generated-resources/econ/USExtensionEConcepts.jbin</econFileString>
 								<econFileString>${project.build.directory}/generated-resources/rxnorm/RRF-RXN.jbin</econFileString>
+								<!-- Note that LOINC doesn't have an eConcept file, it is build completely via runtime calls -->
 							</econFileStrings>
 						</configuration>
 					</execution>
